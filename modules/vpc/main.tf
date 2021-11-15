@@ -48,7 +48,7 @@ resource "aws_eip" "nat" {
   depends_on = [aws_internet_gateway.gw]
 }
 
-resource "aws_nat_gateway" "a" {
+resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public_a.id
 }
@@ -67,7 +67,7 @@ resource "aws_route_table" "private" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.a.id
+    nat_gateway_id = aws_nat_gateway.main.id
   }
 }
 
