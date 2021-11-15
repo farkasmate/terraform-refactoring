@@ -1,0 +1,17 @@
+task default: :test
+
+desc 'Test Lambda'
+task :test do
+  ENV['AWS_ACCESS_KEY_ID']     = 'test'
+  ENV['AWS_SECRET_ACCESS_KEY'] = 'test'
+  ENV['AWS_DEFAULT_REGION']    = 'eu-west-1'
+  ENV['LOCALSTACK_HOSTNAME']   = 'localhost'
+
+  ruby 'lambda_function.rb'
+end
+
+desc 'Package Lambda as ZIP'
+task :package do
+  sh 'rm -f lambda_function_payload.zip'
+  sh 'zip lambda_function_payload.zip lambda_function.rb'
+end
