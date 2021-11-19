@@ -1,12 +1,14 @@
+require 'dotenv'
+
 task default: :test
 
-desc 'Test Lambda'
-task :test do
-  ENV['AWS_ACCESS_KEY_ID']     = 'test'
-  ENV['AWS_SECRET_ACCESS_KEY'] = 'test'
-  ENV['AWS_DEFAULT_REGION']    = 'eu-west-1'
-  ENV['LOCALSTACK_HOSTNAME']   = 'localhost'
+desc 'Load .env file from parent directory'
+task :dotenv do
+  Dotenv.load(File.join('..', '.env'))
+end
 
+desc 'Test Lambda'
+task test: :dotenv do
   ruby 'lambda_function.rb'
 end
 

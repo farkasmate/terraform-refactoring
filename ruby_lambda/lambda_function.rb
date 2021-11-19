@@ -4,8 +4,8 @@ require 'aws-sdk-lambda'
 require 'aws-sdk-s3'
 
 params = {}
-if ENV["LOCALSTACK_HOSTNAME"]
-  params = { endpoint: "http://#{ENV["LOCALSTACK_HOSTNAME"]}:4566" }
+if ENV['LOCALSTACK_HOSTNAME'] && ENV['LOCALSTACK_PORT']
+  params = { endpoint: "http://#{ENV['LOCALSTACK_HOSTNAME']}:#{ENV['LOCALSTACK_PORT']}" }
 end
 
 $s3 = Aws::S3::Client.new(params)

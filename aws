@@ -1,7 +1,12 @@
 #!/bin/bash
 
-export AWS_ACCESS_KEY_ID=test
-export AWS_SECRET_ACCESS_KEY=test
-export AWS_DEFAULT_REGION=eu-west-1
+set -eu
 
-exec aws --endpoint-url=http://localhost:4566 "${@}"
+env_file="$(dirname "${BASH_SOURCE[0]}")/.env"
+
+if [ -f "${env_file}" ]
+then
+  export $(grep -v '^#' "${env_file}")
+fi
+
+exec aws --endpoint-url="http://${LOCALSTACK_HOSTNAME}:${LOCALSTACK_PORT}" "${@}"
