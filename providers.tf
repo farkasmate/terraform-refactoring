@@ -1,14 +1,30 @@
 locals {
-  environment = { for match in regexall("(?P<key>[[:word:]]*)=(?P<value>[[:graph:]]*)\n", file(".env")) : match["key"] => match["value"] }
+  localstack_endpoint = "http://${data.dotenv.localstack.env["LOCALSTACK_HOSTNAME"]}:${data.dotenv.localstack.env["LOCALSTACK_PORT"]}"
+}
 
-  localstack_endpoint = "http://${local.environment["LOCALSTACK_HOSTNAME"]}:${local.environment["LOCALSTACK_PORT"]}"
+terraform {
+  required_version = "~> 1.1"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.66"
+    }
+    dotenv = {
+      source  = "jrhouston/dotenv"
+      version = "~> 1.0"
+    }
+  }
+}
+
+data "dotenv" "localstack" {
+  filename = ".env"
 }
 
 provider "aws" {
-  access_key = local.environment["AWS_ACCESS_KEY_ID"]
-  secret_key = local.environment["AWS_SECRET_ACCESS_KEY"]
-  region     = local.environment["AWS_DEFAULT_REGION"]
-
+  access_key = data.dotenv.localstack.env["AWS_ACCESS_KEY_ID"]
+  secret_key = data.dotenv.localstack.env["AWS_SECRET_ACCESS_KEY"]
+  region     = data.dotenv.localstack.env["AWS_DEFAULT_REGION"]
 
   s3_force_path_style         = true
   skip_credentials_validation = true

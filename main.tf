@@ -31,7 +31,7 @@ resource "aws_lambda_function" "test_lambda" {
 
   environment {
     variables = {
-      LOCALSTACK_PORT = local.environment["LOCALSTACK_PORT"]
+      LOCALSTACK_PORT = data.dotenv.localstack.env["LOCALSTACK_PORT"]
     }
   }
 }
