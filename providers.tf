@@ -32,26 +32,10 @@ provider "aws" {
   skip_requesting_account_id  = true
 
   endpoints {
-    ec2 = local.localstack_endpoint
-
-    apigateway     = local.localstack_endpoint
-    cloudformation = local.localstack_endpoint
-    cloudwatch     = local.localstack_endpoint
-    dynamodb       = local.localstack_endpoint
-    es             = local.localstack_endpoint
-    firehose       = local.localstack_endpoint
+    cloudwatchlogs = local.localstack_endpoint
+    ec2            = local.localstack_endpoint
     iam            = local.localstack_endpoint
-    kinesis        = local.localstack_endpoint
     lambda         = local.localstack_endpoint
-    redshift       = local.localstack_endpoint
-    route53        = local.localstack_endpoint
     s3             = local.localstack_endpoint
-    secretsmanager = local.localstack_endpoint
-    ses            = local.localstack_endpoint
-    sns            = local.localstack_endpoint
-    sqs            = local.localstack_endpoint
-    ssm            = local.localstack_endpoint
-    stepfunctions  = local.localstack_endpoint
-    sts            = local.localstack_endpoint
   }
 }
