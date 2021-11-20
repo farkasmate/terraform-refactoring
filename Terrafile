@@ -1,0 +1,5 @@
+# vim: set syntax=yaml:
+---
+lambda:
+  source: https://github.com/terraform-aws-modules/terraform-aws-lambda
+  version: v2.26.0

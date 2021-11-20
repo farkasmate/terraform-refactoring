@@ -20,6 +20,18 @@ bundle install
 bundle exec rake package
 ```
 
+## Install Terraform modules
+
+Download `terrafile` binary
+```
+wget https://github.com/coretech/terrafile/releases/download/v0.6/terrafile_0.6_Linux_x86_64.tar.gz -O- | tar xz
+```
+
+Install modules from `Terrafile`
+```
+./terrafile
+```
+
 ## Apply Terraform in localstack
 
 Make sure that `terraform.tfstate*` files are cleaned up after each `localstack` restart.

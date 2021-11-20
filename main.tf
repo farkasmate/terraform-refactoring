@@ -7,37 +7,19 @@ module "vpc" {
   source = "./modules/vpc"
 }
 
-data "aws_iam_policy_document" "assume_lambda" {
-  statement {
-    actions = ["sts:AssumeRole"]
+module "bucket_list" {
+  source = "./vendor/modules/lambda"
 
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
-}
+  create_package         = false
+  local_existing_package = "lambda/bucket-list/gen/lambda_function_payload.zip"
 
-resource "aws_iam_role" "bucket_list" {
-  name = "bucket-list"
-
-  assume_role_policy = data.aws_iam_policy_document.assume_lambda.json
-}
-
-resource "aws_lambda_function" "bucket_list" {
-  filename      = local.bucket_list_lambda
   function_name = "bucket-list"
-  role          = aws_iam_role.bucket_list.arn
   handler       = "lambda_function.lambda_handler"
-
-  source_code_hash = filebase64sha256(local.bucket_list_lambda)
 
   runtime = "ruby2.7"
 
-  environment {
-    variables = {
-      LOCALSTACK_PORT = data.dotenv.localstack.env["LOCALSTACK_PORT"]
-    }
+  environment_variables = {
+    LOCALSTACK_PORT = data.dotenv.localstack.env["LOCALSTACK_PORT"]
   }
 }
 
