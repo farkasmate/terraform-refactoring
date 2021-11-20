@@ -15,7 +15,7 @@ docker-compose up -d
 ## Package Lambda
 
 ```
-cd ruby_lambda/
+cd lambda/bucket-list/
 bundle install
 bundle exec rake package
 ```
@@ -32,5 +32,5 @@ terraform apply -auto-approve
 ## Invoke Lambda
 
 ```
-./aws lambda invoke --function-name lambda_function_name --log-type Tail /dev/null | jq --raw-output '.LogResult' | base64 -d
+./aws lambda invoke --function-name bucket-list --log-type Tail /dev/null | jq --raw-output '.LogResult' | base64 -d
 ```

@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+require 'archive/zip'
+require 'dotenv'
+
+task default: :test
+
+desc 'Load .env file from root directory'
+task :dotenv do
+  Dotenv.load(File.join('..', '..', '.env'))
+end
+
+desc 'Test Lambda'
+task test: :dotenv do
+  ruby 'lambda_function.rb'
+end
+
+desc 'Package Lambda as ZIP'
+task :package do
+  gen_dir  = 'gen'
+  zip_file = File.join(gen_dir, 'lambda_function_payload.zip')
+
+  Dir.mkdir(gen_dir) unless File.exist? gen_dir
+  File.delete(zip_file) if File.exist? zip_file
+
+  Archive::Zip.archive(zip_file, 'lambda_function.rb')
+end

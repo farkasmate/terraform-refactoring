@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'archive-zip', '~> 0.12'
 gem 'aws-sdk-lambda', '~> 1.71'
 gem 'aws-sdk-s3', '~> 1.105'
 gem 'dotenv', '~> 2.7'
