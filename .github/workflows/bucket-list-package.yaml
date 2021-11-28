@@ -1,0 +1,24 @@
+name: bucket-list-package
+
+on: workflow_call
+
+env:
+  WORKING_DIRECTORY: lambda/bucket-list
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby (.ruby-version)
+      uses: ruby/setup-ruby@v1
+      with:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        bundler-cache: true
+    - name: Create Lambda ZIP
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: bundle exec rake package
+    - uses: actions/upload-artifact@v2
+      with:
+        name: bucket-list-lambda
+        path: lambda/bucket-list/gen/lambda_function_payload.zip
