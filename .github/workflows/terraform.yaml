@@ -84,16 +84,19 @@ jobs:
       with:
         terraform_version: ${{ steps.terraform_version.outputs.content }}
 
-    - uses: actions/download-artifact@v2
-      with:
-        name: bucket-list-lambda
-        path: lambda/bucket-list/gen/
-
     - uses: actions/checkout@v2
       with:
         ref: master
     - run: terraform init
+    - uses: actions/download-artifact@v2
+      with:
+        name: bucket-list-lambda
+        path: lambda/bucket-list/gen/
     - run: terraform apply -auto-approve
     - uses: actions/checkout@v2
     - run: terraform init
+    - uses: actions/download-artifact@v2
+      with:
+        name: bucket-list-lambda
+        path: lambda/bucket-list/gen/
     - run: terraform apply -auto-approve
