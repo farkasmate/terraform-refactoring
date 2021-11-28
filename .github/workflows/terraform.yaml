@@ -1,0 +1,33 @@
+name: terraform
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  WORKING_DIRECTORY: lambda/bucket-list
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: isbang/compose-action@v1.0.0
+      with:
+        compose-file: compose.yaml
+    - name: Read .terraform-version
+      id: terraform_version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: .terraform-version
+        trim: true
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ steps.terraform_version.outputs.content }}
+
+    - run: terraform fmt -check -diff
+    - run: terraform init
+    - run: terraform validate
+    - run: terraform apply -auto-approve
