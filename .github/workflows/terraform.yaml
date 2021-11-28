@@ -10,7 +10,11 @@ env:
   WORKING_DIRECTORY: lambda/bucket-list
 
 jobs:
+  package_lambda:
+    uses: farkasmate/terraform-refactoring/.github/workflows/bucket-list-package.yaml@master
+
   test:
+    needs: package_lambda
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
