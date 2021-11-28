@@ -1,0 +1,31 @@
+name: bucket-list
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+defaults:
+  run:
+    working-directory: lambda/bucket-list
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Read .ruby-version
+      id: ruby_version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: .ruby-version
+    - name: Echo package.json
+      run: echo "${{ steps.ruby_version.outputs.content }}"
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ steps.ruby_version.outputs.content }}
+        bundler-cache: true
+    - name: Run tests
+      run: bundle exec rake test
