@@ -1,0 +1,39 @@
+name: bucket-list
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  WORKING_DIRECTORY: lambda/bucket-list
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: isbang/compose-action@v1.0.0
+      with:
+        compose-file: compose.yaml
+    - name: Set up Ruby (.ruby-version)
+      uses: ruby/setup-ruby@v1
+      with:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        bundler-cache: true
+    - name: Run tests
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: bundle exec rake test
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby (.ruby-version)
+      uses: ruby/setup-ruby@v1
+      with:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        bundler-cache: true
+    - name: Create Lambda ZIP
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: bundle exec rake package
