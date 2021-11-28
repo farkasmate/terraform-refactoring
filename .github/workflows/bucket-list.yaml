@@ -19,7 +19,8 @@ jobs:
       id: ruby_version
       uses: juliangruber/read-file-action@v1
       with:
-        path: .ruby-version
+        path: ./lambda/bucket-list/.ruby-version
+        trim: true
     - name: Echo package.json
       run: echo "${{ steps.ruby_version.outputs.content }}"
     - name: Set up Ruby
