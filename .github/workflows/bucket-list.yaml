@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: isbang/compose-action@v1
+    - uses: isbang/compose-action@v1.0.0
       with:
         compose-file: compose.yaml
     - name: Set up Ruby (.ruby-version)
