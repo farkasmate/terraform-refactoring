@@ -37,3 +37,7 @@ jobs:
     - name: Create Lambda ZIP
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: bundle exec rake package
+    - uses: actions/upload-artifact@v2
+      with:
+        name: bucket-list-lambda
+        path: lambda/bucket-list/gen/lambda_function_payload.zip

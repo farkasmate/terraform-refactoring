@@ -27,6 +27,11 @@ jobs:
       with:
         terraform_version: ${{ steps.terraform_version.outputs.content }}
 
+    - uses: actions/download-artifact@v2
+      with:
+        name: bucket-list-lambda
+        path: lambda/bucket-list/gen/
+
     - run: terraform fmt -check -diff
     - run: terraform init
     - run: terraform validate
