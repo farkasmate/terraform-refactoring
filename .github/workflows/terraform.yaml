@@ -11,30 +11,14 @@ env:
 
 jobs:
   package_lambda:
-    uses: farkasmate/terraform-refactoring/.github/workflows/bucket-list-package.yaml@master
+    uses: ./.github/workflows/bucket-list-package.yaml
 
   test:
     needs: package_lambda
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: isbang/compose-action@v1.0.0
-      with:
-        compose-file: compose.yaml
-    - name: Read .terraform-version
-      id: terraform_version
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: .terraform-version
-        trim: true
-    - uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: ${{ steps.terraform_version.outputs.content }}
-
-    - uses: actions/download-artifact@v2
-      with:
-        name: bucket-list-lambda
-        path: lambda/bucket-list/gen/
+    - uses: ./.github/actions/terraform-common.yaml
 
     - run: terraform fmt -check -diff
     - run: terraform init
@@ -45,23 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: isbang/compose-action@v1.0.0
-      with:
-        compose-file: compose.yaml
-    - name: Read .terraform-version
-      id: terraform_version
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: .terraform-version
-        trim: true
-    - uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: ${{ steps.terraform_version.outputs.content }}
-
-    - uses: actions/download-artifact@v2
-      with:
-        name: bucket-list-lambda
-        path: lambda/bucket-list/gen/
+    - uses: ./.github/actions/terraform-common.yaml
 
     - run: terraform init
     - run: terraform apply -auto-approve
@@ -71,23 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: isbang/compose-action@v1.0.0
-      with:
-        compose-file: compose.yaml
-    - name: Read .terraform-version
-      id: terraform_version
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: .terraform-version
-        trim: true
-    - uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: ${{ steps.terraform_version.outputs.content }}
-
-    - uses: actions/download-artifact@v2
-      with:
-        name: bucket-list-lambda
-        path: lambda/bucket-list/gen/
+    - uses: ./.github/actions/terraform-common.yaml
 
     - name: Checkout master
       uses: actions/checkout@v2
