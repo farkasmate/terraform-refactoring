@@ -34,6 +34,6 @@ jobs:
       with:
         working-directory: ${{ env.WORKING_DIRECTORY }}
         bundler-cache: true
-    - name: Run tests
+    - name: Create Lambda ZIP
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: bundle exec rake package
