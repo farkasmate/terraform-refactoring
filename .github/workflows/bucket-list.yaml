@@ -6,27 +6,19 @@ on:
   pull_request:
     branches: [ master ]
 
-defaults:
-  run:
-    working-directory: lambda/bucket-list
+env:
+  WORKING_DIRECTORY: lambda/bucket-list
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Read .ruby-version
-      id: ruby_version
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./lambda/bucket-list/.ruby-version
-        trim: true
-    - name: Echo package.json
-      run: echo "${{ steps.ruby_version.outputs.content }}"
-    - name: Set up Ruby
+    - name: Set up Ruby (.ruby-version)
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: ${{ steps.ruby_version.outputs.content }}
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         bundler-cache: true
     - name: Run tests
+      working-directory: ${{ env.WORKING_DIRECTORY }}
       run: bundle exec rake test
