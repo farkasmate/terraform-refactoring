@@ -11,7 +11,7 @@ env:
 
 jobs:
   package_lambda:
-    uses: ./.github/workflows/bucket-list-package.yaml
+    uses: farkasmate/terraform-refactoring/.github/workflows/bucket-list-package.yaml@master
 
   test:
     needs: package_lambda
