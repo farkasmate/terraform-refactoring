@@ -89,11 +89,16 @@ jobs:
         name: bucket-list-lambda
         path: lambda/bucket-list/gen/
 
-    - uses: actions/checkout@v2
+    - name: Checkout master
+      uses: actions/checkout@v2
       with:
+        clean: false
         ref: master
     - run: terraform init
     - run: terraform apply -auto-approve
-    - uses: actions/checkout@v2
+    - name: Checkout current ref (without cleanup)
+      uses: actions/checkout@v2
+      with:
+        clean: false
     - run: terraform init
     - run: terraform apply -auto-approve
