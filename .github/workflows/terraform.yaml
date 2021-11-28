@@ -1,0 +1,56 @@
+name: terraform
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  package_lambda:
+    uses: farkasmate/terraform-refactoring/.github/workflows/bucket-list-package.yaml@master
+
+  test:
+    needs: package_lambda
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Terraform common steps
+      uses: ./.github/actions/terraform-common
+
+    - run: terraform fmt -check -diff
+    - run: terraform init
+    - run: terraform validate
+
+  apply_new:
+    needs: package_lambda
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Terraform common steps
+      uses: ./.github/actions/terraform-common
+
+    - run: terraform init
+    - run: terraform apply -auto-approve
+
+  apply_on_master:
+    needs: package_lambda
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Terraform common steps
+      uses: ./.github/actions/terraform-common
+
+    - name: Checkout master
+      uses: actions/checkout@v2
+      with:
+        clean: false
+        ref: master
+    - run: terraform init
+    - run: terraform apply -auto-approve
+    - name: Checkout current ref (without cleanup)
+      uses: actions/checkout@v2
+      with:
+        clean: false
+    - run: terraform init
+    - run: terraform apply -auto-approve
