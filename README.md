@@ -9,7 +9,7 @@ Terraform 1.1 - moved {} block tests
 ## Run localstack
 
 ```
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Package Lambda
