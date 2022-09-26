@@ -1,5 +1,6 @@
 locals {
   bucket_list_lambda = "lambda/bucket-list/gen/lambda_function_payload.zip"
+  example_buckets    = ["lorem", "ipsum"]
 }
 
 module "vpc" {
@@ -40,12 +41,15 @@ resource "aws_lambda_function" "bucket_list" {
   }
 }
 
-resource "aws_s3_bucket" "lorem" {
-  bucket = "example-lorem"
-  acl    = "private"
+resource "aws_s3_bucket" "example" {
+  for_each = toset(local.example_buckets)
+
+  bucket = "example-${each.value}"
 }
 
-resource "aws_s3_bucket" "ipsum" {
-  bucket = "example-ipsum"
+resource "aws_s3_bucket_acl" "example_acl" {
+  for_each = toset(local.example_buckets)
+
+  bucket = aws_s3_bucket.example[each.value].id
   acl    = "private"
 }
