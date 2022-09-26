@@ -41,6 +41,7 @@ resource "aws_lambda_function" "bucket_list" {
   }
 }
 
+#tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "example" {
   for_each = toset(local.example_buckets)
 
